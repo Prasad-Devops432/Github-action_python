@@ -1,25 +1,20 @@
-# app.py
+from typing import List
+from flask import Flask
 
-def read_requirements(file_path: str = "requirements.txt") -> list[str]:
-    """Read requirements.txt and return a list of lines."""
-    try:
-        with open(file_path, "r") as f:
-            lines = [line.strip() for line in f.readlines() if line.strip()]
-        return lines
-    except FileNotFoundError:
-        print(f"{file_path} not found")
-        return []
+app = Flask(__name__)
 
 
-def main():
-    requirements = read_requirements()
-    if not requirements:
-        print("No requirements found.")
-    else:
-        print("Requirements in this project:")
-        for req in requirements:
-            print(f"- {req}")
+def read_requirements(file_path: str = "requirements.txt") -> List[str]:
+    """Read and return a list of package requirements from a file."""
+    with open(file_path, "r") as f:
+        lines = f.readlines()
+    return [line.strip() for line in lines if line.strip()]
+
+
+@app.route("/")
+def home():
+    return "Hello, this is a CI/CD pipeline demo app!"
 
 
 if __name__ == "__main__":
-    main()
+    app.run(host="0.0.0.0", port=5000)
